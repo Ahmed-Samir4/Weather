@@ -25,7 +25,7 @@ findCity();
 
 
 async function getData(city) {
-    var resp = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=7c1748c30d59486d972163455230508&q=${city}&days=3`);
+    var resp = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=7c1748c30d59486d972163455230508&q=${city}&days=3`);
     var info = await resp.json();
     Cname = info.location.name;
     today = info.current;
