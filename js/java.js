@@ -15,6 +15,7 @@ var degreeIcon2 = document.getElementById('degreeIcon2');
 var avgdegree2 = document.getElementById('avgdegree2');
 var moreinfo2 = document.getElementById('moreinfo2');
 
+
 async function findCity() {
     var Location = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=38b2e7b22652465baa811f36cd488797&fields=city');
     var L = await Location.json();
@@ -78,7 +79,11 @@ function displayDays(daysName, daysDate, daysDegreeIcon, avgDegree, moreInfo, da
 }
 
 search.addEventListener('keyup', function () {
-    getData(search.value);
+    var NameRegex = /[a-zA-z]{3,}/;
+    if (NameRegex.test(search.value)) {
+        getData(search.value);
+    }
+
 })
 
 function dayName(currentTime) {
