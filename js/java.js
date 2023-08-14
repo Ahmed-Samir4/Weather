@@ -2,6 +2,7 @@ var Cname = '';
 var days;
 var today;
 var search = document.getElementById('search');
+var UrlValid = false;
 
 var dayName1 = document.getElementById('dayName1');
 var dayDate1 = document.getElementById('dayDate1');
@@ -27,19 +28,28 @@ findCity();
 
 async function getData(city) {
     var resp = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=7c1748c30d59486d972163455230508&q=${city}&days=3`);
-    var info = await resp.json();
-    Cname = info.location.name;
-    today = info.current;
-    days = info.forecast.forecastday;
+    console.log(resp);
+    if (!resp.ok || resp.status != 200) {
+        UrlValid = true;
+    } else {
+        if (resp.ok || (resp.status >= 200 && resp.status <= 299)) {
+            var info = await resp.json();
+            Cname = info.location.name;
+            today = info.current;
+            days = info.forecast.forecastday;
 
-    // console.log(today);
-    // console.log(Cname);
-    // console.log(days);
+            // console.log(today);
+            // console.log(Cname);
+            // console.log(days);
 
-    displayName(Cname)
-    displayToday(today);
-    displayDays(dayName1, dayDate1, degreeIcon1, avgdegree1, moreinfo1, days[1]);
-    displayDays(dayName2, dayDate2, degreeIcon2, avgdegree2, moreinfo2, days[2]);
+            displayName(Cname)
+            displayToday(today);
+            displayDays(dayName1, dayDate1, degreeIcon1, avgdegree1, moreinfo1, days[1]);
+            displayDays(dayName2, dayDate2, degreeIcon2, avgdegree2, moreinfo2, days[2]);
+        }
+
+    }
+
 }
 
 
@@ -80,10 +90,14 @@ function displayDays(daysName, daysDate, daysDegreeIcon, avgDegree, moreInfo, da
 
 search.addEventListener('keyup', function () {
     var NameRegex = /[a-zA-z]{3,}/;
-    if (NameRegex.test(search.value)) {
+    if (NameRegex.test(search.value) && UrlValid == false) {
         getData(search.value);
+    } else {
+        if (UrlValid==true) {
+            alert('Enter valid Name!!')
+        }
     }
-
+    UrlValid=false;
 })
 
 function dayName(currentTime) {
